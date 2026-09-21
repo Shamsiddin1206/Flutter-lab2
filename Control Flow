@@ -1,0 +1,96 @@
+void problem1() {
+  int score = 85;
+  String grade = switch (score) {
+    >= 90 => 'A',
+    >= 80 => 'B',
+    >= 70 => 'C',
+    _ => 'F'
+  };
+  print('Grade achieved: $grade');
+}
+
+void problem2() {
+  int number = -4;
+
+  if (number > 0) {
+    print('$number is positive');
+  } else if (number < 0) {
+    print('$number is negative');
+  } else {
+    print('$number is zero');
+  }
+}
+
+int factorialFor(int n) {
+  int result = 1;
+  for (int i = 1; i <= n; i++) {
+    result *= i;
+  }
+  return result;
+}
+
+int factorialForIn(int n) {
+  int result = 1;
+  for (int i in List.generate(n, (index) => index + 1)) {
+    result *= i;
+  }
+  return result;
+}
+
+void problem3() {
+  int n = 5;
+  print('Factorial of $n with for loop: ${factorialFor(n)}');
+  print('Factorial of $n with for-in loop: ${factorialForIn(n)}');
+}
+
+void problem4() {
+  int target = 7;
+  List<int> guesses = [3, 9, 5, 7, 2];
+  int attempts = 0;
+
+  while (attempts < guesses.length) {
+    int guess = guesses[attempts];
+    attempts++;
+
+    if (guess == target) {
+      print('Guess $guess is correct after $attempts attempts');
+      break;
+    }
+    print('Guess $guess is wrong');
+  }
+}
+
+void problem5() {
+  skip:
+  for (int i = 1; i <= 3; i++) {
+    for (int j = 1; j <= 3; j++) {
+      if (j == 2) continue skip;
+      print('skip loop: i=$i, j=$j');
+    }
+  }
+
+  stop:
+  for (int i = 1; i <= 3; i++) {
+    for (int j = 1; j <= 3; j++) {
+      if (i * j == 4) break stop;
+      print('stop loop: i=$i, j=$j');
+    }
+  }
+}
+
+void main() {
+  print('--- Problem 1 ---');
+  problem1();
+
+  print('--- Problem 2 ---');
+  problem2();
+
+  print('--- Problem 3 ---');
+  problem3();
+
+  print('--- Problem 4 ---');
+  problem4();
+
+  print('--- Problem 5 ---');
+  problem5();
+}
