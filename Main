@@ -1,0 +1,155 @@
+import 'dart:io';
+
+const String fullName = 'Your Full Name';
+const String studentId = 'Your Student ID';
+const String major = 'Software Engineering';
+
+const List<String> sampleArguments = [
+  '10',
+  '20',
+  '30.5',
+  'abc',
+  '--port=8080',
+  '--host=localhost',
+  '--verbose',
+];
+
+void problem1(List<String> arguments) {
+  print('Hello, Dart World!');
+  if (arguments.isNotEmpty) {
+    print('Command line arguments passed: ${arguments.join(", ")}');
+  }
+}
+
+void problem2() {
+  print('Full name : $fullName');
+  print('Student ID: $studentId');
+  print('Major     : $major');
+}
+
+void problem3(List<String> arguments) {
+  print('Total number of command-line arguments: ${arguments.length}');
+}
+
+void problem4(List<String> arguments) {
+  final numbers = <double>[];
+
+  for (final arg in arguments) {
+    if (arg.startsWith('--')) continue; 
+
+    final value = double.tryParse(arg);
+    if (value == null || !value.isFinite) {
+      print('Skipping non-numeric argument: "$arg"');
+    } else {
+      numbers.add(value);
+    }
+  }
+
+  if (numbers.isEmpty) {
+    print('No numeric arguments were provided, so there is no average.');
+    return;
+  }
+
+  final sum = numbers.reduce((a, b) => a + b);
+  final average = sum / numbers.length;
+
+  print('Numbers : ${numbers.join(", ")}');
+  print('Average : ${average.toStringAsFixed(2)}');
+}
+
+void problem5(List<String> arguments) {
+  if (arguments.length != 2) {
+    print('WARNING: expected exactly 2 arguments '
+        'but received ${arguments.length}.');
+    print('Usage: dart run main_function.dart <first> <second>');
+    return;
+  }
+
+  print('Received exactly two arguments: '
+      '"${arguments[0]}" and "${arguments[1]}".');
+}
+
+void problem6(List<String> arguments) {
+  if (arguments.contains('--fail')) {
+    stderr.writeln('Simulated failure requested with --fail.');
+    exitCode = 1;
+    return;
+  }
+
+  exitCode = 0;
+  print('Finished successfully, exitCode = $exitCode');
+}
+
+Map<String, String> parseFlags(List<String> arguments) {
+  final flags = <String, String>{};
+
+  for (final arg in arguments) {
+    if (!arg.startsWith('--')) continue;
+
+    final body = arg.substring(2);
+    final separator = body.indexOf('=');
+
+    final key = separator == -1 ? body : body.substring(0, separator);
+    final value = separator == -1 ? 'true' : body.substring(separator + 1);
+
+    if (key.isEmpty) continue;
+    flags[key] = value;
+  }
+
+  return flags;
+}
+
+void problem7(List<String> arguments) {
+  final flags = parseFlags(arguments);
+
+  if (flags.isEmpty) {
+    print('No --key=value flags were found.');
+    return;
+  }
+
+  print('Parsed flags:');
+  flags.forEach((key, value) => print('  $key = $value'));
+
+  final host = flags['host'] ?? 'localhost';
+  final port = int.tryParse(flags['port'] ?? '') ?? 8080;
+  final verbose = (flags['verbose'] ?? 'false') == 'true';
+  print('Resolved config -> host: $host, port: $port, verbose: $verbose');
+}
+
+
+void _header(String title) {
+  print('\n=== $title ===');
+}
+
+void main(List<String> arguments) {
+  final hasArguments = arguments.isNotEmpty;
+
+  final demoArguments = hasArguments ? arguments : sampleArguments;
+
+  _header('Problem 1: Main function with command-line arguments');
+  problem1(arguments);
+
+  _header('Problem 2: Name, student ID and major');
+  problem2();
+
+  _header('Problem 3: Number of command-line arguments');
+  problem3(arguments);
+
+  _header('Problem 4: Average of numeric arguments');
+  if (!hasArguments) {
+    print('(no arguments given, using sample: ${sampleArguments.join(" ")})');
+  }
+  problem4(demoArguments);
+
+  _header('Problem 5: Exactly two arguments required');
+  problem5(arguments);
+
+  _header('Problem 7: Key-value flag parsing');
+  if (!hasArguments) {
+    print('(no arguments given, using sample: ${sampleArguments.join(" ")})');
+  }
+  problem7(demoArguments);
+
+_header('Problem 6: Explicit exit code');
+  problem6(arguments);
+}
