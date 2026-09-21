@@ -1,0 +1,79 @@
+double calculateTotal(double price,
+    {double discount = 0.0, double tax = 0.08}) {
+  double discounted = price * (1 - discount);
+  return discounted * (1 + tax);
+}
+
+bool isEven(int n) => n % 2 == 0;
+
+String decorate(String text, [String prefix = '', String suffix = '']) {
+  return '$prefix$text$suffix';
+}
+
+List<int> transformList(List<int> numbers, int Function(int) transformer) {
+  List<int> result = [];
+  for (int number in numbers) {
+    result.add(transformer(number));
+  }
+  return result;
+}
+
+int fibonacci(int n) {
+  if (n < 0) {
+    throw ArgumentError('n must not be negative');
+  }
+  if (n <= 1) {
+    return n;
+  }
+  return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+void problem1() {
+  print('Total: \$${calculateTotal(100.0, discount: 0.15).toStringAsFixed(2)}');
+  print('Total without discount: \$${calculateTotal(100.0).toStringAsFixed(2)}');
+  print('Total with custom tax: \$${calculateTotal(100.0, tax: 0.2).toStringAsFixed(2)}');
+}
+
+void problem2() {
+  print('4 is even: ${isEven(4)}');
+  print('7 is even: ${isEven(7)}');
+  print('0 is even: ${isEven(0)}');
+  print('-3 is even: ${isEven(-3)}');
+}
+
+void problem3() {
+  print(decorate('Dart'));
+  print(decorate('Dart', 'Hello, '));
+  print(decorate('Dart', 'Hello, ', '!'));
+}
+
+void problem4() {
+  List<int> numbers = [1, 2, 3, 4, 5];
+
+  print('Original: $numbers');
+  print('Doubled: ${transformList(numbers, (n) => n * 2)}');
+  print('Squared: ${transformList(numbers, (n) => n * n)}');
+}
+
+void problem5() {
+  for (int i = 0; i <= 10; i++) {
+    print('fibonacci($i) = ${fibonacci(i)}');
+  }
+}
+
+void main() {
+  print('--- Problem 1 ---');
+  problem1();
+
+  print('--- Problem 2 ---');
+  problem2();
+
+  print('--- Problem 3 ---');
+  problem3();
+
+  print('--- Problem 4 ---');
+  problem4();
+
+  print('--- Problem 5 ---');
+  problem5();
+}
