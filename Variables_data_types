@@ -1,0 +1,169 @@
+import 'dart:math' show sqrt;
+
+String _computeGreeting() {
+  print('  (computing the lazy value now...)');
+  return 'Hello from a lazy variable!';
+}
+
+void problem1() {
+  var mutableName = 'Alice';
+  final String birthCity = 'Tashkent';
+  const double pi = 3.14159;
+  late String lazyDescription;
+
+  lazyDescription = 'Initialized later!';
+  print('$mutableName born in $birthCity. Math constant: $pi. '
+      'Status: $lazyDescription');
+
+  mutableName = 'Alicia';
+  print('var was reassigned: $mutableName');
+
+  late final String lazyComputed = _computeGreeting();
+  print('Before first access of lazyComputed');
+  print(lazyComputed); 
+  print(lazyComputed); 
+}
+
+void problem2() {
+  int age = 20;
+  double gpa = 3.75;
+  String country = 'Uzbekistan';
+  bool isStudent = true;
+
+  print('age       = $age (${age.runtimeType})');
+  print('gpa       = $gpa (${gpa.runtimeType})');
+  print('country   = $country (${country.runtimeType})');
+  print('isStudent = $isStudent (${isStudent.runtimeType})');
+}
+
+void problem3() {
+  final DateTime runtimeStamp = DateTime.now();
+  print('final runtimeStamp : $runtimeStamp');
+
+const String courseCode = 'SE202';
+  const int labNumber = 2;
+  print('const values       : $courseCode / lab $labNumber');
+
+  const List<int> constA = [1, 2, 3];
+  const List<int> constB = [1, 2, 3];
+  print('identical(constA, constB) = ${identical(constA, constB)}'); 
+
+  final List<int> finalA = [1, 2, 3];
+  final List<int> finalB = [1, 2, 3];
+  print('identical(finalA, finalB) = ${identical(finalA, finalB)}'); 
+
+  finalA.add(4);
+  print('final list after add(4)   : $finalA');
+
+  final List<int> immutableList = const [1, 2, 3];
+  try {
+    immutableList.add(4);
+  } on UnsupportedError catch (e) {
+    print('const list cannot be modified: ${e.message}');
+  }
+}
+
+String? lookupNickname(int userId) => userId == 1 ? 'Sherlock' : null;
+
+int? parseNumber(String text) => int.tryParse(text);
+
+void problem4() {
+  String country = 'Uzbekistan';
+  print('Non-nullable country: $country');
+
+  String? nicknameOfUser1 = lookupNickname(1); // 'Sherlock'
+  String? nicknameOfUser2 = lookupNickname(2); // null
+  print('nicknameOfUser1 = $nicknameOfUser1');
+  print('nicknameOfUser2 = $nicknameOfUser2');
+
+  final String display1 = nicknameOfUser1 ?? 'Guest';
+  final String display2 = nicknameOfUser2 ?? 'Guest';
+  print('display1 = $display1, display2 = $display2');
+
+  print('nicknameOfUser2?.length            = ${nicknameOfUser2?.length}');
+  print('nicknameOfUser2?.length ?? 0       = ${nicknameOfUser2?.length ?? 0}');
+
+  int? attempts = parseNumber('not a number'); // null
+  attempts ??= 3;
+  print('attempts after ??= 3 : $attempts');
+
+  if (nicknameOfUser1 != null) {
+    print('Promoted to String: ${nicknameOfUser1.toUpperCase()}');
+  }
+}
+
+void describe(dynamic value) {
+  if (value is String) {
+    print('String of length ${value.length}: ${value.toUpperCase()}');
+  } else if (value is int) {
+    print('int, isEven = ${value.isEven}, squared = ${value * value}');
+  } else if (value is double) {
+    print('double, rounded = ${value.round()}');
+  } else if (value is List) {
+    print('List with ${value.length} element(s)');
+  } else if (value == null) {
+    print('null');
+  } else {
+    print('Other type: ${value.runtimeType}');
+  }
+}
+
+int lengthOrZero(Object? value) {
+  if (value is! String) return 0;
+  return value.length; // value is a String from here on
+}
+
+String classify(Object? value) => switch (value) {
+      int i when i < 0 => 'negative int ($i)',
+      int i => 'int ($i)',
+      String s => 'string "$s"',
+      null => 'null',
+      _ => 'something else (${value.runtimeType})',
+    };
+
+void problem5() {
+  final values = <dynamic>['Dart', 42, 3.7, [1, 2, 3], null, true];
+
+  for (final value in values) {
+    describe(value);
+  }
+
+  print('lengthOrZero("hello") = ${lengthOrZero("hello")}');
+  print('lengthOrZero(123)     = ${lengthOrZero(123)}');
+
+  print(classify(-5));
+  print(classify(7));
+  print(classify('dart'));
+  print(classify(null));
+  print(classify(2.5));
+}
+
+(double, double, double) scale((double, double, double) p, double factor) =>
+    (p.$1 * factor, p.$2 * factor, p.$3 * factor);
+
+  ({double x, double y, double z}) named = (x: 1.0, y: 2.0, z: 3.0);
+  print('Named record : x = ${named.x}, y = ${named.y}, z = ${named.z}');
+}
+
+bool isActiveUser(UserProfile profile) => profile['isActive'] == true;
+
+void _header(String title) {
+  print('\n=== $title ===');
+}
+
+void main() {
+  _header('Problem 1: var, final, const, late');
+  problem1();
+
+  _header('Problem 2: int, double, String, bool');
+  problem2();
+
+  _header('Problem 3: final vs const');
+  problem3();
+
+  _header('Problem 4: Null safety and ??');
+  problem4();
+
+  _header('Problem 5: Type promotion');
+  problem5();
+}
