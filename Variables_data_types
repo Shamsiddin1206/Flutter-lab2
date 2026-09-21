@@ -138,15 +138,6 @@ void problem5() {
   print(classify(2.5));
 }
 
-(double, double, double) scale((double, double, double) p, double factor) =>
-    (p.$1 * factor, p.$2 * factor, p.$3 * factor);
-
-  ({double x, double y, double z}) named = (x: 1.0, y: 2.0, z: 3.0);
-  print('Named record : x = ${named.x}, y = ${named.y}, z = ${named.z}');
-}
-
-bool isActiveUser(UserProfile profile) => profile['isActive'] == true;
-
 void _header(String title) {
   print('\n=== $title ===');
 }
